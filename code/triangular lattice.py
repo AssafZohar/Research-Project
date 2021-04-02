@@ -51,7 +51,7 @@ def main():
     t_l.set_locations()
     t_l.set_matrix(1)
     # Finds 399 values in order to use sparse matrix methods
-    a = t_l.find_eigen_values(399)[0]
+    a = t_l.find_eigen_values(398)[0]
 
     # Plotting
     w = get_relation(1)
@@ -60,6 +60,12 @@ def main():
     plt.title("Eigen frequencies numeric and analytic")
     plt.ylabel("frequency (arbitrary)")
     plt.legend(["Analytic", "Numeric"])
+    plt.show()
+    c = w-a
+    plt.close()
+    plt.plot(c, 'g.')
+    plt.title("Eigen frequencies numeric and analytic difference")
+    plt.ylabel("frequency (arbitrary)")
     plt.show()
 
 if __name__ == "__main__":
