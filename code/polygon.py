@@ -2,8 +2,8 @@ from matplotlib import pyplot as plt
 import numpy as np
 from math import pi, sqrt
   
-def get_k_values():
-    a = np.linspace(-9,10,28)
+def get_k_values(number_of_nodes):
+    a = np.linspace(-9,10, number_of_nodes)
     x, y = np.meshgrid(a,a)
     k_x = 4 * np.math.pi * x / 20
     k_y = 4 * pi /sqrt(3) * y / 20
@@ -19,7 +19,7 @@ def is_in_hexagon(x, y):
     return (c1 & c2 & c3 & c4 & c5 & c6)
 
 def main():
-    k_x , k_y = get_k_values()
+    k_x , k_y = get_k_values(28)
     x = is_in_hexagon(k_x, k_y)
     k_x = k_x[x]
     k_y = k_y[x]

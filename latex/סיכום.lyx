@@ -359,7 +359,50 @@ Frequencies are sorted from smallest to largest as the numeric calculation
 \begin_layout Standard
 \noindent
 \begin_inset Graphics
-	filename plots/quantization.png
+	filename C:/Projects/Research-Project/plots/quantization.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+this is simillar but not great, using a uniform distribution around BZ1
+ yields the following results
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Projects/Research-Project/plots/BZ1 values.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Projects/Research-Project/plots/BZ1 fixed.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+this is better but the results are not exactly the same.
+\end_layout
+
+\begin_layout Standard
+Next is a contour plot of the frequncies around BZ1
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Projects/Research-Project/plots/contours.png
 	scale 50
 
 \end_inset

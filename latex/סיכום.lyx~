@@ -304,7 +304,20 @@ Quantization
 \begin_layout Standard
 \noindent
 Consider a 20 by 20 lattice (400 vertices overall) with periodic boundary
- conditions, k value quantization is given by
+ conditions, k value quantization is given by Bloch theorem
+\begin_inset Formula 
+\[
+f(r+Na_{1})=e^{ikNa_{1}}f(r)=f(r)\rightarrow kNa_{1}=2\pi m\rightarrow k=\frac{m}{N}b_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+meaning in BZ1 of our lattice
 \begin_inset Formula 
 \[
 k=\frac{p_{1}}{20}b_{1}+\frac{p_{2}}{20}b_{2}
@@ -330,7 +343,7 @@ using these
 \begin_inset Formula $k$
 \end_inset
 
- vectors in the disperssion relation we get all possible frequencies
+ vectors in the disperssion relation we get all possible frequencies.
 \end_layout
 
 \begin_layout Subsubsection*
