@@ -4,19 +4,15 @@ from polygon import get_k_values, is_in_hexagon
 from math import pi, sqrt
 
 def get_relation(D, for_plot = True):
-    a = np.linspace(-9,10,20)
-    x, y = np.meshgrid(a,a)
-
-    # k_x values are only dependent on first reciprocal lattice vector
-    k_x = 2 * np.math.pi * x / 20
-
-    # k_y values are dependent of both reciproval lattice vectors
-    k_y = - 2 * np.math.pi * x / 20 / np.math.sqrt(3) + 4 * np.math.pi * y / 20 / np.math.sqrt(3)
+    k_x , k_y = get_k_values(28)
+    x = is_in_hexagon(k_x, k_y)
+    K_x = k_x[x]
+    K_y = k_y[x]
     # This is actually w^2
     w = (D * (6 - 2 * np.cos(k_x) - 4 * np.cos(k_x / 2) * np.cos(np.math.sqrt(3) * k_y / 2)))
-    #w2 = (D * (6 - 2 * np.cos(K_x) - 4 * np.cos(K_x / 2) * np.cos(np.math.sqrt(3) * K_y / 2)))
+    w2 = (D * (6 - 2 * np.cos(K_x) - 4 * np.cos(K_x / 2) * np.cos(np.math.sqrt(3) * K_y / 2)))
     if (for_plot):
-        return np.sort(np.ndarray.flatten(w))
+        return np.sort(np.ndarray.flatten(w2))
     else:
         return (k_x, k_y, w, K_x, K_y, w2)
 

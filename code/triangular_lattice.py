@@ -71,18 +71,16 @@ def main():
     t_l.set_locations()
     t_l.set_matrix(1)
     # Finds 399 values in order to use sparse matrix methods
-    a = t_l.find_eigen_values(400)[0]
-
-    # Plotting
-    w = t_l.get_analytic(1)
-    plt.plot(w, 'b.')
-    plt.plot(a, 'r.')
-    plt.title("Eigen frequencies numeric and analytic")
-    plt.ylabel("frequency (arbitrary)")
-    plt.legend(["Analytic", "Numeric"])
+    z = numpy.array(t_l.find_eigen_values(400)[1][300])
+    x = numpy.array(t_l.locations[:,0])
+    y = numpy.array(t_l.locations[:,1])
+    X = numpy.reshape(x, (20,20))
+    Y = numpy.reshape(y, (20,20))
+    Z = numpy.reshape(z, (20, 20))
+    # plt.contourf(X,Y,Z) plt.pcolormesh(X,Y,Z, shading="auto")
+    plt.contourf(X,Y,Z)
+    plt.colorbar()
     plt.show()
-    d = a-w
-    print(d)
 
 
 if __name__ == "__main__":
