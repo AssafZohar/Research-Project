@@ -352,6 +352,7 @@ Results
 \end_layout
 
 \begin_layout Standard
+\noindent
 Frequencies are sorted from smallest to largest as the numeric calculation
  does not use reciprocal lattice considerations
 \end_layout
@@ -359,12 +360,131 @@ Frequencies are sorted from smallest to largest as the numeric calculation
 \begin_layout Standard
 \noindent
 \begin_inset Graphics
-	filename plots/quantization.png
-	scale 50
+	filename C:/Projects/Research-Project/plots/correct one.png
+	scale 30
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\noindent
+Here we can see the eigen values are the same up to floating point error
+ (order of 
+\begin_inset Formula $10^{-15})$
+\end_inset
+
+ and we consider this an exact match.
+\end_layout
+
+\begin_layout Standard
+\noindent
+Recall that while calculating the analytical solution we assumed 
+\begin_inset Formula $u=Re(Ae^{i(\omega t-kr)})$
+\end_inset
+
+ meaning solutions linear combinations of:
+\begin_inset Formula 
+\[
+cos(\omega t-kr),sin(\omega t-kr)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+In order to varify that the numeric solutions are also of this form we recall
+ a theorem from linear algebra.
+\end_layout
+
+\begin_layout Standard
+\noindent
+1.
+ (find exact theorem) Let A,B be two linearly independent sets with the
+ same cardinality, if 
+\begin_inset Formula $B\subset SpanA$
+\end_inset
+
+ then 
+\begin_inset Formula $A\subset SpanB$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+2.
+ Let 
+\begin_inset Formula $a_{1},...,a_{n}$
+\end_inset
+
+ be an orthonormal basis and 
+\begin_inset Formula $b=\sum b_{i}a_{i}$
+\end_inset
+
+ then 
+\begin_inset Formula $\langle b,a_{i}\rangle=b_{i}$
+\end_inset
+
+ further 
+\begin_inset Formula $||b||^{2}=\sum_{j=1}^{n}|\langle b,a_{i}\rangle|^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+By using the orthonormal set of vectors supplied numerically we can show
+ that the planar wave solutions are equivalent to the numeric one iff for
+ a set 
+\begin_inset Formula $\{v_{1},...v_{n}\}$
+\end_inset
+
+ eigenvectors with the same eigen values and the set 
+\begin_inset Formula $\{u_{1},...u_{n}\}$
+\end_inset
+
+ of normalized planar waves with momentum 
+\begin_inset Formula $k$
+\end_inset
+
+ corresponding to the same eigen value the following equation holds for
+ all 
+\begin_inset Formula $i\in[n]:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\[
+\sum_{j=1}^{n}|\langle v_{j},u_{i}\rangle|^{2}=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Indeed checking each eigenvalue and all coresponding 
+\begin_inset Formula $k$
+\end_inset
+
+ values we conclude that the above equation hold for all 
+\begin_inset Formula $k$
+\end_inset
+
+ values.
 \end_layout
 
 \end_body

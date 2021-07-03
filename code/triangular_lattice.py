@@ -1,5 +1,6 @@
 import numpy
 from disperssion import get_relation
+import scipy.sparse as sparse
 import scipy.sparse.linalg as linalg
 from matplotlib import pyplot as plt
 
@@ -7,6 +8,7 @@ class AbstractLattice:
     def __init__(self, num_of_nodes):
         self.num_of_nodes = num_of_nodes
         self.dynamic_matrix = numpy.zeros((self.num_of_nodes, self.num_of_nodes))
+        self.sparse_dynamic_matrix = None
     
     def set_neighbour_interaction(self, i, j, interaction_strength):
         # Helper function to abstract index assignment
@@ -35,6 +37,7 @@ class TriangularLattice(AbstractLattice):
             self.set_neighbour_interaction(i, i+row_up, -interaction_strength)
             self.set_neighbour_interaction(i, i-row_up, -interaction_strength)
             self.set_neighbour_interaction(i, i, 6* interaction_strength)
+        self.sparse_dynamic_matrix = sparse.csr_matrix(self.dynamic_matrix)
     
     def set_locations(self):
         # Calculates Locations of all lattice points in equilibrium
@@ -45,6 +48,9 @@ class TriangularLattice(AbstractLattice):
 
     def find_eigen_values(self, num_of_values):
         return linalg.eigsh(self.dynamic_matrix, num_of_values)
+    
+    def sparse_eigen_values(self, eigen_value, num_of_values):
+        return linalg.eigsh(self.sparse_dynamic_matrix, num_of_values, sigma = eigen_value)
     
     def get_analytic(self, D):
         row = int(numpy.math.sqrt(self.num_of_nodes))
@@ -58,20 +64,51 @@ class TriangularLattice(AbstractLattice):
         k_y = - 2 * numpy.math.pi * x / row / numpy.math.sqrt(3) + 4 * numpy.math.pi * y / row / numpy.math.sqrt(3)
         # This is actually w^2
         w = (D * (6 - 2 * numpy.cos(k_x) - 4 * numpy.cos(k_x / 2) * numpy.cos(numpy.math.sqrt(3) * k_y / 2)))
-        return numpy.sort(numpy.ndarray.flatten(w))
-
-def array_has_value(arr, value):
-    for a in arr:
-        if (abs(a- value) < 10 ** -2):
-            return True
-    return False
+        w = numpy.array(w).flatten()
+        k_x = numpy.array(k_x).flatten()
+        k_y = numpy.array(k_y).flatten()
+        index = numpy.argsort(w)
+        return w[index], k_x[index], k_y[index]
+    
+    def find_vectors_and_repricosity(self, eigen_value, eigen_values, vector):
+        new_vals = eigen_values[abs(eigen_values - eigen_value) < 10 ** -5]
+        val_count = new_vals.shape[0]
+        # print(val_count)
+        vals, vecs = self.sparse_eigen_values(eigen_value, val_count)
+        # print(vals)
+        sum = 0
+        for i in range(val_count):
+            sum += abs(vector @ vecs[:, i])**2
+        return sum
 
 def main():
     t_l = TriangularLattice(400)
     t_l.set_locations()
     t_l.set_matrix(1)
+    w, k_x, k_y = t_l.get_analytic(1)
+    print(w)
+    line = numpy.linspace(0, 399, 400)
+    
+    r = numpy.sin(- (k_x[371] * ((line % 20) - (line // 20) / 2) + (k_y[371] * numpy.math.sqrt(3) / 2 * (line // 20) )))
+    r = r / numpy.linalg.norm(r)
+    print(t_l.find_vectors_and_repricosity(w[371], w, r))
+    return
+    count =0
+    for i in range(w.shape[0]):
+        r = numpy.cos(- (k_x[i] * ((line % 20) - (line // 20) / 2) + (k_y[i] * numpy.math.sqrt(3) / 2 * (line // 20) )))
+        r = r / numpy.linalg.norm(r)
+        a = t_l.find_vectors_and_repricosity(w[i], w, r)
+        if (a < 0.98):
+            print(i, a)
+            count += 1
+    print(count)
+    
+    
+    return
+
+
     # Finds 399 values in order to use sparse matrix methods
-    z = numpy.array(t_l.find_eigen_values(400)[1][300])
+    z = numpy.array(t_l.find_eigen_values(400)[1][399])
     x = numpy.array(t_l.locations[:,0])
     y = numpy.array(t_l.locations[:,1])
     X = numpy.reshape(x, (20,20))
