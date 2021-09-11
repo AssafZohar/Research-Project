@@ -23,6 +23,7 @@ wheels/
 latex/
 pdfs/
 plots/
+code/test/
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
