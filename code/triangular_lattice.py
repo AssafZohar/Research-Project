@@ -63,7 +63,10 @@ class TriangularLattice(AbstractLattice):
         # k_y values are dependent of both reciproval lattice vectors
         k_y = - 2 * numpy.math.pi * x / row / numpy.math.sqrt(3) + 4 * numpy.math.pi * y / row / numpy.math.sqrt(3)
         # This is actually w^2
+        a = numpy.linspace(- 2 * numpy.math.pi, 2 * numpy.math.pi, 100)
+        k_x, k_y = numpy.meshgrid(a,a)
         w = (D * (6 - 2 * numpy.cos(k_x) - 4 * numpy.cos(k_x / 2) * numpy.cos(numpy.math.sqrt(3) * k_y / 2)))
+        return w, k_x ,k_y
         w = numpy.array(w).flatten()
         k_x = numpy.array(k_x).flatten()
         k_y = numpy.array(k_y).flatten()
@@ -86,6 +89,33 @@ def main():
     t_l.set_locations()
     t_l.set_matrix(1)
     w, k_x, k_y = t_l.get_analytic(1)
+    w2, vec = t_l.find_eigen_values(400)
+    
+    """plt.plot(w2, 'r.')
+    plt.xlabel("Mode number", fontsize=16)
+    plt.ylabel(r"$\omega ^ 2$ $\left[\frac{D}{m}\right]$", fontsize=16)
+    plt.title("Triangular lattice eigen frequencies numeric", fontsize=18)"""
+    
+
+    fig, ax = plt.subplots()
+    cmhot = plt.get_cmap("coolwarm")
+    im = ax.scatter(k_x, k_y, c=w, cmap=cmhot)
+    
+    plt.colorbar(im, ax=ax, label=r"$\omega ^2 \left[\frac{D}{m}\right]$")
+    plt.title("Lattice disperssion momentum space", fontsize=18)
+    plt.xlabel(r"$K_x$ $\left[\frac{1}{a}\right]$", fontsize=17)
+    plt.ylabel(r"$K_y$ $\left[\frac{1}{a}\right]$", fontsize=17)
+    plt.show()
+
+    """plt.figure()
+    plt.plot(w, 'b.')
+    plt.xlabel("Mode number", fontsize=16)
+    plt.ylabel(r"$\omega ^ 2$ $\left[\frac{D}{m}\right]$", fontsize=16)
+    plt.title("Triangular lattice eigen frequencies analytic", fontsize=18)
+    plt.show()"""
+    return
+
+
     print(w)
     line = numpy.linspace(0, 399, 400)
     
