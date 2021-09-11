@@ -1,5 +1,4 @@
 import numpy
-from disperssion import get_relation
 import scipy.sparse as sparse
 import scipy.sparse.linalg as linalg
 from matplotlib import pyplot as plt
@@ -64,9 +63,7 @@ class TriangularLattice(AbstractLattice):
         k_y = - 2 * numpy.math.pi * x / row / numpy.math.sqrt(3) + 4 * numpy.math.pi * y / row / numpy.math.sqrt(3)
         # This is actually w^2
         a = numpy.linspace(- 2 * numpy.math.pi, 2 * numpy.math.pi, 100)
-        k_x, k_y = numpy.meshgrid(a,a)
         w = (D * (6 - 2 * numpy.cos(k_x) - 4 * numpy.cos(k_x / 2) * numpy.cos(numpy.math.sqrt(3) * k_y / 2)))
-        return w, k_x ,k_y
         w = numpy.array(w).flatten()
         k_x = numpy.array(k_x).flatten()
         k_y = numpy.array(k_y).flatten()
@@ -74,55 +71,28 @@ class TriangularLattice(AbstractLattice):
         return w[index], k_x[index], k_y[index]
     
     def find_vectors_and_repricosity(self, eigen_value, eigen_values, vector):
+        # helper function - checks if input vector is spanned by an eigen space of normal modes with the same frequency
         new_vals = eigen_values[abs(eigen_values - eigen_value) < 10 ** -5]
         val_count = new_vals.shape[0]
-        # print(val_count)
         vals, vecs = self.sparse_eigen_values(eigen_value, val_count)
-        # print(vals)
         sum = 0
         for i in range(val_count):
             sum += abs(vector @ vecs[:, i])**2
         return sum
 
 def main():
+    # checks if planar waves are spanned by lattice normal modes (which implies normal modes are spanned by planar waves)
     t_l = TriangularLattice(400)
     t_l.set_locations()
     t_l.set_matrix(1)
     w, k_x, k_y = t_l.get_analytic(1)
     w2, vec = t_l.find_eigen_values(400)
-    
-    """plt.plot(w2, 'r.')
-    plt.xlabel("Mode number", fontsize=16)
-    plt.ylabel(r"$\omega ^ 2$ $\left[\frac{D}{m}\right]$", fontsize=16)
-    plt.title("Triangular lattice eigen frequencies numeric", fontsize=18)"""
-    
-
-    fig, ax = plt.subplots()
-    cmhot = plt.get_cmap("coolwarm")
-    im = ax.scatter(k_x, k_y, c=w, cmap=cmhot)
-    
-    plt.colorbar(im, ax=ax, label=r"$\omega ^2 \left[\frac{D}{m}\right]$")
-    plt.title("Lattice disperssion momentum space", fontsize=18)
-    plt.xlabel(r"$K_x$ $\left[\frac{1}{a}\right]$", fontsize=17)
-    plt.ylabel(r"$K_y$ $\left[\frac{1}{a}\right]$", fontsize=17)
-    plt.show()
-
-    """plt.figure()
-    plt.plot(w, 'b.')
-    plt.xlabel("Mode number", fontsize=16)
-    plt.ylabel(r"$\omega ^ 2$ $\left[\frac{D}{m}\right]$", fontsize=16)
-    plt.title("Triangular lattice eigen frequencies analytic", fontsize=18)
-    plt.show()"""
-    return
-
-
     print(w)
     line = numpy.linspace(0, 399, 400)
     
     r = numpy.sin(- (k_x[371] * ((line % 20) - (line // 20) / 2) + (k_y[371] * numpy.math.sqrt(3) / 2 * (line // 20) )))
     r = r / numpy.linalg.norm(r)
-    print(t_l.find_vectors_and_repricosity(w[371], w, r))
-    return
+   
     count =0
     for i in range(w.shape[0]):
         r = numpy.cos(- (k_x[i] * ((line % 20) - (line // 20) / 2) + (k_y[i] * numpy.math.sqrt(3) / 2 * (line // 20) )))
@@ -132,22 +102,7 @@ def main():
             print(i, a)
             count += 1
     print(count)
-    
-    
-    return
 
-
-    # Finds 399 values in order to use sparse matrix methods
-    z = numpy.array(t_l.find_eigen_values(400)[1][399])
-    x = numpy.array(t_l.locations[:,0])
-    y = numpy.array(t_l.locations[:,1])
-    X = numpy.reshape(x, (20,20))
-    Y = numpy.reshape(y, (20,20))
-    Z = numpy.reshape(z, (20, 20))
-    # plt.contourf(X,Y,Z) plt.pcolormesh(X,Y,Z, shading="auto")
-    plt.contourf(X,Y,Z)
-    plt.colorbar()
-    plt.show()
 
 
 if __name__ == "__main__":
